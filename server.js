@@ -1,3 +1,4 @@
+require('dotenv').config();
   const express = require('express');
   const mongoose = require('mongoose');
   const bodyParser = require('body-parser');
@@ -10,8 +11,7 @@
   app.use(bodyParser.json());
 
   // Connect to MongoDB
-  const mongoURI = 'mongodb://localhost:27017/formDataDB'; // Change this to your MongoDB connection string
-  mongoose.connect(mongoURI, {
+  const mongoURI = process.env.MONGO_URI;  mongoose.connect(mongoURI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

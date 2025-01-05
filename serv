@@ -1,0 +1,72 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+
+// Connect to MongoDB
+const mongoURI = "mongodb://localhost:27017/formDataDB"; // Update if needed
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "Connection error:"));
+db.once("open", () => {
+  console.log("Connected to MongoDB");
+});
+
+// Define Mongoose Schema
+const formDataSchema = new mongoose.Schema({
+  fecesDescriptions: [
+    {
+      altId: { type: String, required: true },
+      description: { type: String, required: true },
+    },
+  ],
+});
+
+const FormData = mongoose.model("FormData", formDataSchema);
+
+// Test route
+app.get("/test", (req, res) => {
+  res.status(200).json({ message: "Backend is working" });
+});
+
+// Form submission route
+app.post("/submit-form", async (req, res) => {
+  try {
+    const { fecesDescriptions } = req.body;
+
+    if (!Array.isArray(fecesDescriptions) || fecesDescriptions.length === 0) {
+      return res.status(400).json({
+        message: "Invalid or empty fecesDescriptions array.",
+      });
+    }
+
+    const newFormData = new FormData({
+      fecesDescriptions,
+    });
+
+    await newFormData.save();
+    res.status(201).json({ message: "Form data submitted successfully!" });
+  } catch (error) {
+    console.error("Error saving form data:", error);
+    res.status(500).json({
+      message: "Failed to submit form data",
+      error: error.message,
+    });
+  }
+});
+
+// Start the server
+const PORT = 5000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});

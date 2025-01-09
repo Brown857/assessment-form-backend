@@ -2,14 +2,24 @@ require('dotenv').config();
   const express = require('express');
   const mongoose = require('mongoose');
   const bodyParser = require('body-parser');
-  const cors = require('cors');
+  const cors = require("cors");
+
+
+
 
   const app = express();
 
   // Middleware
-  app.use(cors());
-  app.use(bodyParser.json());
+ // app.use(cors());
+  //app.use(bodyParser.json());
 
+  app.use(
+    cors({
+      origin: ["https://677a906ebfce1481a2865922--sanjanaform.netlify.app"], // Add your Netlify frontend URL here
+      methods: ["GET", "POST"], // Allowed methods
+      allowedHeaders: ["Content-Type"],
+    })
+  );
   // Connect to MongoDB
   const mongoURI = process.env.MONGO_URI;  mongoose.connect(mongoURI, {
     useNewUrlParser: true,

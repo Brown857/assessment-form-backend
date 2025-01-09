@@ -20,6 +20,10 @@ require('dotenv').config();
       allowedHeaders: ["Content-Type"],
     })
   );
+
+  app.use(bodyParser.json()); // Parse JSON bodies
+  app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
   // Connect to MongoDB
   const mongoURI = process.env.MONGO_URI;  mongoose.connect(mongoURI, {
     useNewUrlParser: true,

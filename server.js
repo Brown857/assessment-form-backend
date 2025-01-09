@@ -15,8 +15,8 @@ require('dotenv').config();
 
   app.use(
     cors({
-      origin: ["https://677a906ebfce1481a2865922--sanjanaform.netlify.app"], // Add your Netlify frontend URL here
-      methods: ["GET", "POST"], // Allowed methods
+      origin: "https://sanjanaform.netlify.app", // Your Netlify frontend URL
+      methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
       allowedHeaders: ["Content-Type"],
     })
   );
